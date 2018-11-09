@@ -1,0 +1,17 @@
+Pre-Trainning Using VOC 2012
+
+Train The Model
+    Preprocessing
+        #parsing annotations
+        #resize to match input
+            #resize with annotations
+        making y_true
+    Trainning
+        custom loss function
+
+Test The Model
+    accuracy
+    IOU
+
+Trainning Using License PLate Model
+
