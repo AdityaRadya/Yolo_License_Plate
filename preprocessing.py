@@ -4,7 +4,9 @@ import numpy as np
 from constants import get_config
 import pickle
 import os
+import sys
 import random as rn
+import imgaug as iaa
 
 config = get_config()
 IMAGE_H, IMAGE_W, CHANNEL = config['IMAGE_H'], config['IMAGE_W'], config['CHANNEL']
@@ -12,6 +14,7 @@ CLASS = config['CLASS']
 BOX = config['BOX']
 LABELS = config['LABELS']
 GRID_H, GRID_W = config['GRID_H'], config['GRID_W']
+IMAGE_NUM = 1000
 
 def get_center(xmin, ymin, w, h):
     center_w = int(w/2)
@@ -33,7 +36,13 @@ def parsing_xml(xml_path):
         ymin = bbox.find('ymin').text
         xmax = bbox.find('xmax').text
         ymax = bbox.find('ymax').text
-        temp_object = [name, int(xmin), int(ymin), int(xmax), int(ymax)]
+        temp_object = [
+                        name, 
+                        int(float(xmin)), 
+                        int(float(ymin)), 
+                        int(float(xmax)), 
+                        int(float(ymax))
+                        ]
         data.append(temp_object)
     return data
     
@@ -100,42 +109,44 @@ def preprocess_img(img, xml_path):
     out_tf = output_tensor(ann)
     return img, out_tf
 
-def load_dataset(dataset_path, annotations_path):
-    data = []
-    count = 0
-    for img in os.listdir(dataset_path):
+def load_dataset(image_paths, annotations_paths):
+    features_arr = []
+    labels_arr = []
+    for index in range(len(image_paths)) :
         try:
-            img_array = cv2.imread(os.path.join(dataset_path,img)) / 255
-            xml = img.replace('jpg','xml')
-            xml_path = os.path.join(annotations_path, xml)
+            img_array = cv2.imread(image_paths[index]) / 255
+            xml_path = annotations_paths[index]
             features, labels = preprocess_img(img_array, xml_path)
-            data.append([features, labels])
-            count+=1
+            features_arr.append(features)
+            labels_arr.append(labels)
+
         except FileNotFoundError:
             print("error")
             pass
-        if count == 10:
-            break
-    rn.shuffle(data)
-    return data
+    #size_arr = np.arange(len(labels_arr))
+    #randomize = np.random.permutation(len(labels_arr))
+    #features_arr = features_arr[randomize]
+    #labels_arr = labels_arr[randomize]
+    return features_arr, labels_arr
+
       
-if __name__ == '__main__':
-    IMAGE_DIR = 'images'
-    ANNOTATION_DIR = 'annotations'
-
-    train_data = load_dataset(IMAGE_DIR, ANNOTATION_DIR)
-    #print(len(train_data[0]))
-    input_x = []
-    output_y = []
-
-    for features, output in train_data:
-        input_x.append(features)
-        output_y.append(output)
-
-    pickle_out = open("input_x.pickle","wb")
-    pickle.dump(input_x, pickle_out)
-    pickle_out.close()
-
-    pickle_out = open("output_y.pickle","wb")
-    pickle.dump(output_y, pickle_out)
-    pickle_out.close()
+#if __name__ == '__main__':
+    #IMAGE_DIR = '/home/radya/Thesis/images'
+    #ANNOTATION_DIR = '/home/radya/Thesis/annotations'
+#
+    #input_x, output_y = load_dataset(IMAGE_DIR, ANNOTATION_DIR)
+    ##print(len(train_data[0]))
+    ##nput_x = []
+    ##utput_y = []
+#
+    ##or features, output in train_data:
+    ##   input_x.append(features)
+    ##   output_y.append(output)
+#
+    #pickle_out = open("input_x.pickle","wb")
+    #pickle.dump(input_x, pickle_out)
+    #pickle_out.close()
+#
+    #pickle_out = open("output_y.pickle","wb")
+    #pickle.dump(output_y, pickle_out)
+    #pickle_out.close()

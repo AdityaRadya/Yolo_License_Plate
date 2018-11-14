@@ -24,33 +24,51 @@ image_size = (IMAGE_H, IMAGE_W, CHANNEL)
 
 def model0():
     model = Sequential()
-    #Layer 0
-    model.add(Conv2D(128, (3, 3), input_shape=image_size, padding='same'))
+
+    model.add(Conv2D(16, (3, 3), input_shape=image_size, padding='same'))
     model.add(LeakyReLU(alpha=0.1))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    #Layer 1
-    model.add(Conv2D(256, (3, 3), padding='same'))
+
+    model.add(Conv2D(32, (3, 3), padding='same'))
     model.add(LeakyReLU(alpha=0.1))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    #Layer 2
-    model.add(Conv2D(512, (3, 3), padding='same'))
-    model.add(LeakyReLU(alpha=0.1))
-    model.add(BatchNormalization())
+
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    #Layer 3
-    model.add(Conv2D(1024, (3, 3), padding='same'))
-    model.add(LeakyReLU(alpha=0.1))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    #Layer 4
+
     model.add(Conv2D((BOX*5 + CLASS), (3, 3), padding='same'))
     model.add(LeakyReLU(alpha=0.1))
     model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    
+    #Layer 0
+    #model.add(Conv2D(128, (3, 3), input_shape=image_size, padding='same'))
+    #model.add(LeakyReLU(alpha=0.1))
+    #model.add(BatchNormalization())
+    #model.add(MaxPooling2D(pool_size=(2, 2)))
+    ##Layer 1
+    #model.add(Conv2D(256, (3, 3), padding='same'))
+    #model.add(LeakyReLU(alpha=0.1))
+    #model.add(BatchNormalization())
+    #model.add(MaxPooling2D(pool_size=(2, 2)))
+    ##Layer 2
+    #model.add(Conv2D(512, (3, 3), padding='same'))
+    #model.add(LeakyReLU(alpha=0.1))
+    #model.add(BatchNormalization())
+    #model.add(MaxPooling2D(pool_size=(2, 2)))
+    ##Layer 3
+    #model.add(Conv2D(1024, (3, 3), padding='same'))
+    #model.add(LeakyReLU(alpha=0.1))
+    #model.add(BatchNormalization())
+    #model.add(MaxPooling2D(pool_size=(2, 2)))
+    ##Layer 4
+    #model.add(Conv2D((BOX*5 + CLASS), (3, 3), padding='same'))
+    #model.add(LeakyReLU(alpha=0.1))
+    #model.add(BatchNormalization())
 
-    sgd = SGD(lr=0.0001, decay=0.0005, momentum=0.9, nesterov=True)
-    model.compile(loss=yolo_loss, optimizer=sgd, metrics=['accuracy'])
+    #sgd = SGD(lr=0.0001, decay=0.0005, momentum=0.9, nesterov=True)
+    #model.compile(loss=yolo_loss, optimizer=sgd, metrics=['accuracy'])
 
     return model
 

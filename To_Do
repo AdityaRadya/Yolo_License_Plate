@@ -1,17 +1,27 @@
+Code
+
 Pre-Trainning Using VOC 2012
-
-Train The Model
-    Preprocessing
-        #parsing annotations
-        #resize to match input
-            #resize with annotations
-        making y_true
-    Trainning
-        custom loss function
-
-Test The Model
-    accuracy
-    IOU
+Train
+    ReDesign Model
+    Train and Save Weights (how to ?)
 
 Trainning Using License PLate Model
+Preprocessing
+    Annotating data
+    Image Augmentation
+
+Train The Model
+    Load and Train Each Model
+
+Test The Model
+    Accuracy
+    IOU
+
+Thesis
+Fix Title
+Change Equations into own format not images
+Fix Layout of Thesis
+
+
+
 
